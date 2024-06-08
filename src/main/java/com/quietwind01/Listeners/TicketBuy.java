@@ -86,8 +86,10 @@ public class TicketBuy implements CommandExecutor {
 
         // Update player's total purchased tickets
         stats.createNewPlayer(player.getName());
-        double currentTotalTickets = stats.getTotalTicketsPurchased(player.getName());
-        stats.updateTotalTicketsPurchased(player.getName(), currentTotalTickets + amount);
+        stats.updateTotalTicketsPurchased(player.getName(), amount);
+        
+        // Update server stats
+        stats.updateTotalTicketsPurchased("__LOTTERY__", amount);
 
         // Update the HashMap with the player's ticket count
         ConcurrentHashMap<String, Integer> playerTickets = plugin.getPlayerTickets();

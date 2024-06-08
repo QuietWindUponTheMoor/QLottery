@@ -63,6 +63,11 @@ public class CommandManager implements CommandExecutor {
             return new TotalPool(plugin).onCommand(sender, command, label, args);
         }
 
+        // Stats command
+        if ("stats".equals(parentSubcommand)) {
+            return new Statistics(plugin).onCommand(sender, command, label, args);
+        }
+
         return true;
 
     }

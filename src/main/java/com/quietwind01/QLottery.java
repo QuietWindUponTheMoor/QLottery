@@ -187,8 +187,9 @@ public class QLottery extends JavaPlugin {
                 payout -= payoutTax;
                 double p1CurrentWon = stats.getTotalAmountWon(playerName);
                 stats.updateTotalAmountWon(playerName, p1CurrentWon + payout);
-                double p1Wins = stats.getTotalWins(playerName);
-                stats.updateTotalWins(playerName, p1Wins++);
+                stats.updateTotalWins(playerName, 1);
+                stats.updateServerWinsTotal(1);
+                stats.updateServerPayoutTotal(payout);
                 double payout2nd = 0.00;
                 double payout2ndTax = payout2nd * payoutTaxMultiplier;
                 double payout3rd = 0.00;
@@ -199,25 +200,30 @@ public class QLottery extends JavaPlugin {
                     payout2nd -= payout2ndTax;
                     double p2CurrentWon = stats.getTotalAmountWon(playerName2nd);
                     stats.updateTotalAmountWon(playerName2nd, p2CurrentWon + payout2nd);
-                    double p2Wins = stats.getTotalWins(playerName2nd);
-                    stats.updateTotalWins(playerName2nd, p2Wins++);
+                    stats.updateTotalWins(playerName2nd, 1);
+                    stats.updateServerWinsTotal(1);
+                    stats.updateServerPayoutTotal(payout2nd);
                 }
                 if (playersCount > 3) {
                     payout3rd = payout * getConfig().getDouble("third-place-multiplier");
                     payout3rd -= payout3rdTax;
                     double p3CurrentWon = stats.getTotalAmountWon(playerName3rd);
                     stats.updateTotalAmountWon(playerName3rd, p3CurrentWon + payout3rd);
-                    double p3Wins = stats.getTotalWins(playerName3rd);
-                    stats.updateTotalWins(playerName3rd, p3Wins++);
+                    stats.updateTotalWins(playerName3rd, 1);
+                    stats.updateServerWinsTotal(1);
+                    stats.updateServerPayoutTotal(payout3rd);
                 }
                 if (playersCount > 4) {
                     payoutBonus = getConfig().getDouble("bonus-winner-amount"); // NOT TAXED
                     double pBonusCurrentWon = stats.getTotalAmountWon(playerBonusName);
                     stats.updateTotalAmountWon(playerBonusName, pBonusCurrentWon + payoutBonus);
-                    double pBonusWins = stats.getTotalWins(playerBonusName);
-                    stats.updateTotalWins(playerBonusName, pBonusWins++);
+                    stats.updateTotalWins(playerBonusName, 1);
+                    stats.updateServerWinsTotal(1);
+                    stats.updateServerPayoutTotal(payoutBonus);
                 }
 
+                // Update server total draws
+                stats.updateServerDrawsTotal(1);
 
                 // Announce winners
                 Bukkit.getServer().broadcastMessage(chatPrefix + "" + player.getDisplayName() + "§3won first place with §a$" + payout + "§3! §6Congratulations!");
