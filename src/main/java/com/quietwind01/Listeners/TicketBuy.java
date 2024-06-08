@@ -7,10 +7,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import com.quietwind01.YAML.PlayerStats;
 
 public class TicketBuy implements CommandExecutor {
     
     private final QLottery plugin;
+    private PlayerStats stats;
 
     public TicketBuy(QLottery plugin) {
 
@@ -81,6 +83,11 @@ public class TicketBuy implements CommandExecutor {
 
         // Remove totalCostOfPurchase from player's account and then store to ConcurrentHashMap
         econUtility.subtractBalance(player, totalCostOfPurchase);
+
+        // Update player's total purchased tickets
+        stats.createNewPlayer(player.getName());
+        double currentTotalTickets = stats.getTotalTicketsPurchased(player.getName());
+        stats.updateTotalTicketsPurchased(player.getName(), currentTotalTickets + amount);
 
         // Update the HashMap with the player's ticket count
         ConcurrentHashMap<String, Integer> playerTickets = plugin.getPlayerTickets();

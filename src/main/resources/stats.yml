@@ -10,8 +10,6 @@ all-time-wins: 0
 # Player stats
 player-stats:
   __LOTTERY__:
-    total-wins: 0
-    total-amount-won: 0
     total-tickets-purchased: 0
   QuietWind01:
     total-wins: 0

@@ -12,6 +12,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.quietwind01.Listeners.CommandManager;
 import com.quietwind01.Utils.EconomyUtils;
+import com.quietwind01.YAML.PlayerStats;
 
 public class QLottery extends JavaPlugin {
 
@@ -23,6 +24,7 @@ public class QLottery extends JavaPlugin {
     ConcurrentHashMap<String, String> allTickets = new ConcurrentHashMap<>();
     private int taskID = -1;
     public String chatPrefix = "§5[§a§l§nQLottery§5]§f "; // Get plugin name for chat
+    private PlayerStats stats;
 
     public QLottery() {
 
@@ -138,6 +140,9 @@ public class QLottery extends JavaPlugin {
                 double arbitraryAmount_ = totalCurrentTickets * getConfig().getDouble("arbitrary-tickets-multiplier");
                 Integer arbitraryAmount = (int) Math.ceil(arbitraryAmount_);
                 playerTickets.put("__LOTTERY__", arbitraryAmount);
+                
+                // Update __LOTTERY__'s total-tickets-purchased
+                stats.updateTotalTicketsPurchased("__LOTTERY__", arbitraryAmount_);
 
                 // Select a 1st place winner
                 String playerName = selectWinner();
@@ -171,13 +176,19 @@ public class QLottery extends JavaPlugin {
                 String playerBonusName = select2ndOr3rdWinner();
                 Player playerBonus = Bukkit.getPlayer(playerBonusName);
 
-                // Calculate amount to pay out
+                // Calculate amount to add from multiplier
                 double payoutTaxMultiplier = getConfig().getDouble("payout-tax");
                 double drawMultiplier = getConfig().getDouble("draw-multiplier");
                 double amountToAddFromMultiplier = totalPool * drawMultiplier;
+
+                // Get payout amounts & update players' stats
                 double payout = totalPool + amountToAddFromMultiplier;
                 double payoutTax = payout * payoutTaxMultiplier;
                 payout -= payoutTax;
+                double p1CurrentWon = stats.getTotalAmountWon(playerName);
+                stats.updateTotalAmountWon(playerName, p1CurrentWon + payout);
+                double p1Wins = stats.getTotalWins(playerName);
+                stats.updateTotalWins(playerName, p1Wins++);
                 double payout2nd = 0.00;
                 double payout2ndTax = payout2nd * payoutTaxMultiplier;
                 double payout3rd = 0.00;
@@ -186,14 +197,27 @@ public class QLottery extends JavaPlugin {
                 if (playersCount > 2) {
                     payout2nd = payout * getConfig().getDouble("second-place-multiplier");
                     payout2nd -= payout2ndTax;
+                    double p2CurrentWon = stats.getTotalAmountWon(playerName2nd);
+                    stats.updateTotalAmountWon(playerName2nd, p2CurrentWon + payout2nd);
+                    double p2Wins = stats.getTotalWins(playerName2nd);
+                    stats.updateTotalWins(playerName2nd, p2Wins++);
                 }
                 if (playersCount > 3) {
                     payout3rd = payout * getConfig().getDouble("third-place-multiplier");
                     payout3rd -= payout3rdTax;
+                    double p3CurrentWon = stats.getTotalAmountWon(playerName3rd);
+                    stats.updateTotalAmountWon(playerName3rd, p3CurrentWon + payout3rd);
+                    double p3Wins = stats.getTotalWins(playerName3rd);
+                    stats.updateTotalWins(playerName3rd, p3Wins++);
                 }
                 if (playersCount > 4) {
                     payoutBonus = getConfig().getDouble("bonus-winner-amount"); // NOT TAXED
+                    double pBonusCurrentWon = stats.getTotalAmountWon(playerBonusName);
+                    stats.updateTotalAmountWon(playerBonusName, pBonusCurrentWon + payoutBonus);
+                    double pBonusWins = stats.getTotalWins(playerBonusName);
+                    stats.updateTotalWins(playerBonusName, pBonusWins++);
                 }
+
 
                 // Announce winners
                 Bukkit.getServer().broadcastMessage(chatPrefix + "" + player.getDisplayName() + "§3won first place with §a$" + payout + "§3! §6Congratulations!");

@@ -1,6 +1,7 @@
 package com.quietwind01.Listeners;
 
 import com.quietwind01.Utils.EconomyUtils;
+import com.quietwind01.YAML.PlayerStats;
 import com.quietwind01.QLottery;
 import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.command.Command;
@@ -11,6 +12,7 @@ import org.bukkit.entity.Player;
 public class TicketSell implements CommandExecutor {
     
     private final QLottery plugin;
+    private PlayerStats stats;
 
     public TicketSell(QLottery plugin) {
 
@@ -85,6 +87,11 @@ public class TicketSell implements CommandExecutor {
         EconomyUtils econUtility = new EconomyUtils(plugin);
         double playerBalance = econUtility.getPlayerBalance(player); // Get player balance
         econUtility.addBalance(player, totalCostOfSale);
+
+        // Update player's total purchased tickets
+        stats.createNewPlayer(player.getName());
+        double currentTotalTickets = stats.getTotalTicketsPurchased(player.getName());
+        stats.updateTotalTicketsPurchased(player.getName(), currentTotalTickets - amount);
 
         // Update the HashMap with the player's ticket count
         Integer newTicketCount = playerTicketsAmount - amount;
