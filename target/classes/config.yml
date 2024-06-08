@@ -1,0 +1,51 @@
+
+
+#       .----------------.  .----------------.  .----------------.  .----------------.  .----------------.  .----------------.  .----------------.  .----------------.                                                                                                      
+#      | .--------------. || .--------------. || .--------------. || .--------------. || .--------------. || .--------------. || .--------------. || .--------------. |                                                                                                     
+#      | |    ___       | || |   _____      | || |     ____     | || |  _________   | || |  _________   | || |  _________   | || |  _______     | || |  ____  ____  | |                                                                                                     
+#      | |  .'   '.     | || |  |_   _|     | || |   .'    `.   | || | |  _   _  |  | || | |  _   _  |  | || | |_   ___  |  | || | |_   __ \    | || | |_  _||_  _| | |                                                                                                     
+#      | | /  .-.  \    | || |    | |       | || |  /  .--.  \  | || | |_/ | | \_|  | || | |_/ | | \_|  | || |   | |_  \_|  | || |   | |__) |   | || |   \ \  / /   | |                                                                                                     
+#      | | | |   | |    | || |    | |   _   | || |  | |    | |  | || |     | |      | || |     | |      | || |   |  _|  _   | || |   |  __ /    | || |    \ \/ /    | |                                                                                                     
+#      | | \  `-'  \_   | || |   _| |__/ |  | || |  \  `--'  /  | || |    _| |_     | || |    _| |_     | || |  _| |___/ |  | || |  _| |  \ \_  | || |    _|  |_    | |                                                                                                     
+#      | |  `.___.\__|  | || |  |________|  | || |   `.____.'   | || |   |_____|    | || |   |_____|    | || | |_________|  | || | |____| |___| | || |   |______|   | |                                                                                                     
+#      | |              | || |              | || |              | || |              | || |              | || |              | || |              | || |              | |                                                                                                     
+#      | '--------------' || '--------------' || '--------------' || '--------------' || '--------------' || '--------------' || '--------------' || '--------------' |                                                                                                     
+#       '----------------'  '----------------'  '----------------'  '----------------'  '----------------'  '----------------'  '----------------'  '----------------'                                                                                                      
+
+
+#        ____                                                   
+#       | __ ) _   _                                            
+#       |  _ \| | | |                                           
+#       | |_) | |_| |                                           
+#       |____/ \__, |_      _ __        ___           _  ___  _ 
+#        / _ \ _____(_) ___| |\ \      / (_)_ __   __| |/ _ \/ |
+#       | | | | | | | |/ _ \ __\ \ /\ / /| | '_ \ / _` | | | | |
+#       | |_| | |_| | |  __/ |_ \ V  V / | | | | | (_| | |_| | |
+#        \__\_\\__,_|_|\___|\__| \_/\_/  |_|_| |_|\__,_|\___/|_|
+# Version 1.0.0-SNAPSHOT
+
+
+
+# Set the interval for which the lottery is drawn, in seconds. 120 = 2 minutes.
+draw-interval: 120
+
+# Set the draw multiplier (0-1). This number is the number the total pool amount is multiplied by and added to the pool upon cashout.
+# For example, if the pool amount is $1,000.00 and the multiplier is set to 0.5, the total cashout will be $1,500.00
+# For a balanced lottery system, we don't recommend that this value gets set higher than 0.15. The default value is 0.1
+# Set this to 0 to make cashouts be exactly the starting-amount + player pool.
+# The max multiplier is 1.0
+# Set this to between 0.1 and 1.0
+draw-multiplier: 0.1
+
+# Set the starting amount that the pool will start with.
+# This is the amount of money that will start off in the pool and then get added to by player ticket sales and pool additions.
+# Players can add to the pool a specific amount by using /ql pool add <amount>
+# The default amount is $1,000.00 (value of 1000)
+# Set this to 0 to have a starting pool of $0
+pool-default-amount: 1000.00
+
+# The cost of a lottery ticket
+ticket-cost: 20.00
+
+# The max amount of tickets a player can buy at once
+max-tickets: 20

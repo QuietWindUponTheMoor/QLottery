@@ -1,0 +1,19 @@
+name: Qlottery
+version: 1.0-SNAPSHOT
+main: com.quietwind01.QLottery
+api-version: 1.20
+
+commands:
+  ql:
+    description: The base command for QLottery.
+    usage: /ql <subcommand>
+    permission: qlottery.*
+    children:
+      ticket:
+        description: Buy or sell tickets.
+        usage: /ql ticket <buy|sell> <amount>
+        permission: qlottery.ticket
+      pool:
+        description: View the amount of money in the pool.
+        usage: /ql pool amount
+        permission: qlottery.pool
