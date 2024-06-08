@@ -3,6 +3,8 @@ version: 1.0.0-RC.1
 main: com.quietwind01.QLottery
 api-version: 1.20
 
+depend: [Bukkit]
+
 commands:
   ql:
     description: The base command for QLottery.
