@@ -1,0 +1,26 @@
+--1. Add 2nd and 3rd place prize winners
+
+2. Add a jackpot system? Maybe add feature where there may not be a winner every draw, (make the plugin insert arbitrary records in the allTickets ConcurrentHashMap), 
+which allows the pool to accumulate
+
+3. Ticket bundles (example: 10 for the price of 9, configurable in the config)
+
+4. Random weekly and daily prize draws with their own separate prize pools
+
+5. Secondary TYPE of winner (different from 2nd and 3rd place). This player would get a small bonus amount of cash, say $100
+
+6. BETTER ANNOUNCEMENT FEATURES
+
+7. Implement permanent-storage statistics system
+
+8. Tax system? Wins over X amount get taxed Y percent?
+
+9. ADMIN/MODERATOR COMMANDS!!!!
+
+10. GUI? YES
+
+11. Customizable messages (message templates)
+
+12. Private player messages to remind of events, pool amounts, chances of winning*, etc.
+
+13. Notify player how much tickets cost

@@ -51,6 +51,11 @@ public class CommandManager implements CommandExecutor {
             }
         }
 
+        // Tickets command
+        if ("tickets".equals(parentSubcommand)) {
+            return new TicketsOwned(plugin).onCommand(sender, command, label, args);
+        }
+
         // Pool subcommands
         if ("pool".equals(parentSubcommand)) {
             return new TotalPool(plugin).onCommand(sender, command, label, args);

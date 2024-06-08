@@ -49,3 +49,10 @@ ticket-cost: 20.00
 
 # The max amount of tickets a player can buy at once
 max-tickets: 20
+
+# The percent at which the 2nd place and 3rd place winners for normal payouts gets.
+# For example, if the total pool size is $1,000.00 and this number is set to 0.5, this winner will get $500
+# The default for 2nd place is 0.25
+second-place-multiplier: 0.25
+# The default for 3rd place is 0.10
+third-place-multiplier: 0.10

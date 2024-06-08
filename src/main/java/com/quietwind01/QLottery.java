@@ -132,22 +132,50 @@ public class QLottery extends JavaPlugin {
                     return;
                 }
 
-                // Select a winner
+                // Select a 1st place winner
                 String playerName = selectWinner();
                 Player player = Bukkit.getPlayer(playerName);
+                // 2nd Place
+                String playerName2nd = selectWinner();
+                Player player2nd = Bukkit.getPlayer(playerName2nd);
+                // 3rd Place
+                String playerName3rd = selectWinner();
+                Player player3rd = Bukkit.getPlayer(playerName3rd);
 
                 // Calculate amount to pay out
                 double drawMultiplier = getConfig().getDouble("draw-multiplier");
                 double amountToAddFromMultiplier = totalPool * drawMultiplier;
                 double payout = totalPool + amountToAddFromMultiplier;
+                double payout2nd = 0.00;
+                double payout3rd = 0.00;
+                if (playersCount > 2) {
+                    payout2nd = payout * getConfig().getDouble("second-place-multiplier");
+                }
+                if (playersCount > 3) {
+                    payout3rd = payout * getConfig().getDouble("third-place-multiplier");
+                }
 
-                // Announce winner
-                Bukkit.getServer().broadcastMessage(chatPrefix + "");
+                // Announce winners
+                Bukkit.getServer().broadcastMessage(chatPrefix + "" + player.getDisplayName() + "§3won first place with §a$" + payout + "§3! §6Congratulations!");
+                if (payout2nd > 0) {
+                    Bukkit.getServer().broadcastMessage(chatPrefix + "" + player2nd.getDisplayName() + "§3won second place with §a$" + payout2nd + "§3! §6Congratulations!");
+                }
+                if (payout3rd > 0) {
+                    Bukkit.getServer().broadcastMessage(chatPrefix + "" + player3rd.getDisplayName() + "§3won third place with §a$" + payout3rd + "§3! §6Congratulations!");
+                }
 
-                // Payout
+                // Payouts
                 EconomyUtils econUtility = new EconomyUtils(this);
                 econUtility.addBalance(player, payout);
                 player.sendMessage(chatPrefix + "§a" + payout + "§fhas been added to your account! Congratulations! You now have §a$" + econUtility.getPlayerBalance(player) + "§f.");
+                if (payout2nd > 0) {
+                    econUtility.addBalance(player2nd, payout2nd);
+                    player.sendMessage(chatPrefix + "§a" + payout2nd + "§fhas been added to your account! Congratulations! You now have §a$" + econUtility.getPlayerBalance(player2nd) + "§f.");
+                }
+                if (payout3rd > 0) {
+                    econUtility.addBalance(player2nd, payout3rd);
+                    player.sendMessage(chatPrefix + "§a" + payout3rd + "§fhas been added to your account! Congratulations! You now have §a$" + econUtility.getPlayerBalance(player3rd) + "§f.");
+                }
 
                 // Clear temp data
                 clearTempData();
