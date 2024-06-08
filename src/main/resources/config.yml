@@ -56,3 +56,19 @@ max-tickets: 20
 second-place-multiplier: 0.25
 # The default for 3rd place is 0.10
 third-place-multiplier: 0.10
+
+# To make it possible for there to not always be winners, this is the multiplier by which to multiply the total purchased tickets amount by.
+# For example, if there have been 100 tickets purchased, and this number is set to 0.3, then the lottery will insert 30 arbitrary tickets into the pool.
+# These 'arbitrary' tickets are useless and only serve as padding. The system may draw one of these tickets, and if it does, the draw timer will restart and the current pool will be added to the next pool.
+# The default is 0.45
+# The result of totalCurrentTickets and this value will be rounded UP.
+arbitrary-tickets-multiplier: 0.45
+
+# Set the tax percent that winners are taxed upon payout
+# This value should be between 0 and 1
+# The default tax is 6% (0.06)
+payout-tax: 0.06
+
+# This is the amount of money the bonus winner gets.
+# This number is meant to be much lower than a normal prize, say $100, which is the default value here.
+bonus-winner-amount: 100.00

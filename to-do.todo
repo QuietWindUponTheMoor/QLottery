@@ -1,6 +1,6 @@
 --1. Add 2nd and 3rd place prize winners
 
-2. Add a jackpot system? Maybe add feature where there may not be a winner every draw, (make the plugin insert arbitrary records in the allTickets ConcurrentHashMap), 
+--2. Add a jackpot system? Maybe add feature where there may not be a winner every draw, (make the plugin insert arbitrary records in the allTickets ConcurrentHashMap), 
 which allows the pool to accumulate
 
 3. Ticket bundles (example: 10 for the price of 9, configurable in the config)
@@ -13,7 +13,7 @@ which allows the pool to accumulate
 
 7. Implement permanent-storage statistics system
 
-8. Tax system? Wins over X amount get taxed Y percent?
+--8. Tax system? Wins over X amount get taxed Y percent?
 
 9. ADMIN/MODERATOR COMMANDS!!!!
 

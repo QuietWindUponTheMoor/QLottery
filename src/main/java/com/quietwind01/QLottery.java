@@ -132,27 +132,61 @@ public class QLottery extends JavaPlugin {
                     return;
                 }
 
+                // Insert a bunch of arbitrary records in the playerTickets map
+                // This is for making it possible for there to not always be a winner :)
+                int totalCurrentTickets = playerTickets.values().stream().mapToInt(Integer::intValue).sum();
+                double arbitraryAmount_ = totalCurrentTickets * getConfig().getDouble("arbitrary-tickets-multiplier");
+                Integer arbitraryAmount = (int) Math.ceil(arbitraryAmount_);
+                playerTickets.put("__LOTTERY__", arbitraryAmount);
+
                 // Select a 1st place winner
                 String playerName = selectWinner();
+
+                // Before going further, check if the winner is __LOTTERY__
+                if (playerName.equals("__LOTTERY__")) {
+                    // Calculate the new pool size and set it
+                    updateTotalPool(poolDefaultAmount); // This will add the old pool amount to the starting pool amount for the next draw
+
+                    // Announce that nobody won, and that the timer will reset and the pool will transfer over
+                    Bukkit.getServer().broadcastMessage(chatPrefix + "§3Nobody won this draw. The timer will restart. The pool is now §a$" + totalPool + "§3!");
+
+                    // Reset playerTickets, and allTickets and restart
+                    clearTempDataOnNullDraw();
+
+                    // Restart DrawTimer
+                    stopTimer(); // Stop previous timer
+                    AtomicInteger newInterval = new AtomicInteger(drawInterval);
+                    startMainTimer(newInterval);
+                    return;
+                }
                 Player player = Bukkit.getPlayer(playerName);
+
+
                 // 2nd Place
-                String playerName2nd = selectWinner();
+                String playerName2nd = select2ndOr3rdWinner();
                 Player player2nd = Bukkit.getPlayer(playerName2nd);
                 // 3rd Place
-                String playerName3rd = selectWinner();
+                String playerName3rd = select2ndOr3rdWinner();
                 Player player3rd = Bukkit.getPlayer(playerName3rd);
 
                 // Calculate amount to pay out
+                double payoutTaxMultiplier = getConfig().getDouble("payout-tax");
                 double drawMultiplier = getConfig().getDouble("draw-multiplier");
                 double amountToAddFromMultiplier = totalPool * drawMultiplier;
                 double payout = totalPool + amountToAddFromMultiplier;
+                double payoutTax = payout * payoutTaxMultiplier;
+                payout -= payoutTax;
                 double payout2nd = 0.00;
+                double payout2ndTax = payout2nd * payoutTaxMultiplier;
                 double payout3rd = 0.00;
+                double payout3rdTax = payout3rd * payoutTaxMultiplier;
                 if (playersCount > 2) {
                     payout2nd = payout * getConfig().getDouble("second-place-multiplier");
+                    payout2nd -= payout2ndTax;
                 }
                 if (playersCount > 3) {
                     payout3rd = payout * getConfig().getDouble("third-place-multiplier");
+                    payout3rd -= payout3rdTax;
                 }
 
                 // Announce winners
@@ -168,13 +202,16 @@ public class QLottery extends JavaPlugin {
                 EconomyUtils econUtility = new EconomyUtils(this);
                 econUtility.addBalance(player, payout);
                 player.sendMessage(chatPrefix + "§a" + payout + "§fhas been added to your account! Congratulations! You now have §a$" + econUtility.getPlayerBalance(player) + "§f.");
+                player.sendMessage(chatPrefix + "§eYou were taxed §c$" + payoutTax + " §efor this prize.");
                 if (payout2nd > 0) {
                     econUtility.addBalance(player2nd, payout2nd);
                     player.sendMessage(chatPrefix + "§a" + payout2nd + "§fhas been added to your account! Congratulations! You now have §a$" + econUtility.getPlayerBalance(player2nd) + "§f.");
+                    player.sendMessage(chatPrefix + "§eYou were taxed §c$" + payout2ndTax + " §efor this prize.");
                 }
                 if (payout3rd > 0) {
                     econUtility.addBalance(player2nd, payout3rd);
                     player.sendMessage(chatPrefix + "§a" + payout3rd + "§fhas been added to your account! Congratulations! You now have §a$" + econUtility.getPlayerBalance(player3rd) + "§f.");
+                    player.sendMessage(chatPrefix + "§eYou were taxed §c$" + payout3rdTax + " §efor this prize.");
                 }
 
                 // Clear temp data
@@ -257,9 +294,27 @@ public class QLottery extends JavaPlugin {
 
     }
 
+    private void clearTempDataOnNullDraw() {
+
+        // Reset playerTickets, and allTickets
+        playerTickets.clear();
+        allTickets.clear();
+
+    }
+
+    private String select2ndOr3rdWinner() {
+
+        String player2nd = selectWinner();
+        if (player2nd.equals("__LOTTERY__")) {
+            return select2ndOr3rdWinner();
+        }
+        return player2nd;
+
+    }
+
     private void clearTempData() {
 
-        // Reset totalPool, drawInterval, playerTickets, and allTickets
+        // Reset totalPool, playerTickets, and allTickets
         totalPool = poolDefaultAmount;
         playerTickets.clear();
         allTickets.clear();
