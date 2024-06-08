@@ -46,6 +46,8 @@ public class CommandManager implements CommandExecutor {
                     return new TicketBuy(plugin).onCommand(sender, command, label, args);
                 case "sell":
                     return new TicketSell(plugin).onCommand(sender, command, label, args);
+                case "cost":
+                    return new TicketCost(plugin).onCommand(sender, command, label, args);
                 default:
                     sender.sendMessage(plugin.chatPrefix + "§cUnknown subcommand. Usage: /ql <subcommand>");
             }
