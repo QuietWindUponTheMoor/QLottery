@@ -71,4 +71,5 @@ payout-tax: 0.06
 
 # This is the amount of money the bonus winner gets.
 # This number is meant to be much lower than a normal prize, say $100, which is the default value here.
+# This amount is not taxed
 bonus-winner-amount: 100.00

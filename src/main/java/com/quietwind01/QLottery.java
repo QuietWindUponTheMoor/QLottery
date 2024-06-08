@@ -168,6 +168,8 @@ public class QLottery extends JavaPlugin {
                 // 3rd Place
                 String playerName3rd = select2ndOr3rdWinner();
                 Player player3rd = Bukkit.getPlayer(playerName3rd);
+                String playerBonusName = select2ndOr3rdWinner();
+                Player playerBonus = Bukkit.getPlayer(playerBonusName);
 
                 // Calculate amount to pay out
                 double payoutTaxMultiplier = getConfig().getDouble("payout-tax");
@@ -180,6 +182,7 @@ public class QLottery extends JavaPlugin {
                 double payout2ndTax = payout2nd * payoutTaxMultiplier;
                 double payout3rd = 0.00;
                 double payout3rdTax = payout3rd * payoutTaxMultiplier;
+                double payoutBonus = 0.00;
                 if (playersCount > 2) {
                     payout2nd = payout * getConfig().getDouble("second-place-multiplier");
                     payout2nd -= payout2ndTax;
@@ -187,6 +190,9 @@ public class QLottery extends JavaPlugin {
                 if (playersCount > 3) {
                     payout3rd = payout * getConfig().getDouble("third-place-multiplier");
                     payout3rd -= payout3rdTax;
+                }
+                if (playersCount > 4) {
+                    payoutBonus = getConfig().getDouble("bonus-winner-amount"); // NOT TAXED
                 }
 
                 // Announce winners
@@ -196,6 +202,9 @@ public class QLottery extends JavaPlugin {
                 }
                 if (payout3rd > 0) {
                     Bukkit.getServer().broadcastMessage(chatPrefix + "" + player3rd.getDisplayName() + "§3won third place with §a$" + payout3rd + "§3! §6Congratulations!");
+                }
+                if (payoutBonus > 0) {
+                    Bukkit.getServer().broadcastMessage(chatPrefix + "" + playerBonus.getDisplayName() + "§3won the bonus prize with §a$" + payoutBonus + "§3! §6Congratulations!");
                 }
 
                 // Payouts
@@ -212,6 +221,11 @@ public class QLottery extends JavaPlugin {
                     econUtility.addBalance(player2nd, payout3rd);
                     player.sendMessage(chatPrefix + "§a" + payout3rd + "§fhas been added to your account! Congratulations! You now have §a$" + econUtility.getPlayerBalance(player3rd) + "§f.");
                     player.sendMessage(chatPrefix + "§eYou were taxed §c$" + payout3rdTax + " §efor this prize.");
+                }
+                if (payoutBonus > 0) {
+                    econUtility.addBalance(playerBonus, payoutBonus);
+                    player.sendMessage(chatPrefix + "§a" + payoutBonus + "§fhas been added to your account! Congratulations! You now have §a$" + econUtility.getPlayerBalance(playerBonus) + "§f.");
+                    player.sendMessage(chatPrefix + "§eYou were taxed §c$0 §efor this prize."); // Remember, not taxed :)
                 }
 
                 // Clear temp data
