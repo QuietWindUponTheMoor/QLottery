@@ -1,5 +1,7 @@
 package com.quietwind01;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +9,8 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,6 +36,53 @@ public class QLottery extends JavaPlugin {
         interval = new AtomicInteger(drawInterval);
 
     }
+
+    private boolean saveStatsYAML() {
+
+        try {
+
+            // QLottery folder
+            File dir = getDataFolder();
+
+            // Create file object
+            File file = new File(dir, "stats.yml");
+
+            // Create the file itself, if it doesn't already exist
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+
+            // Add file contents
+            FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+            config = createStatsCode(config);
+
+            return true;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+    private FileConfiguration createStatsCode(FileConfiguration config) {
+
+        config.getString("# The amount of money paid out TOTAL over the lifespan of the server");
+        config.getString("all-time-payout-total");
+        config.set("all-time-payout-total", 0);
+        config.getString("# The amount of total draws over the lifespan of the server");
+        config.getString("all-time-draws-total");
+        config.set("all-time-draws-total", 0);
+        config.getString("# The amount of total wins over the lifespan of the server");
+        config.getString("all-time-wins");
+        config.set("all-time-wins", 0);
+        config.getString("# Player stats");
+        config.getString("player-stats.__LOTTERY__.total-tickets-purchased");
+        config.set("player-stats.__LOTTERY__.total-tickets-purchased", 0);
+
+        return config;
+
+    }
     
     @Override
     public final void onEnable() {
@@ -43,6 +94,9 @@ public class QLottery extends JavaPlugin {
 
             // Create the config file if it doesn't exist
             saveDefaultConfig();
+
+            // Create the stats.yml file if it doesn't exist
+            saveStatsYAML();
 
             // Send startup messages
             startMessages(this.chatPrefix);
