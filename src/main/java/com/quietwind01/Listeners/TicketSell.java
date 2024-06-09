@@ -107,7 +107,7 @@ public class TicketSell implements CommandExecutor {
 
         // Send success message
         player.sendMessage(plugin.chatPrefix + "§2You have sold §f" + amount + " §2tickets for §e$" + totalCostOfSale + "§2, congratulations!");
-        player.sendMessage(plugin.chatPrefix + "§eYou now have a balance of §a$" + playerBalance + "§e!");
+        player.sendMessage(plugin.chatPrefix + "§eYou now have a balance of §a$" + (playerBalance + totalCostOfSale) + "§e!");
         player.sendMessage(plugin.chatPrefix + "§eYou now have  §a" + playerTickets.get(player.getName()) + "§e tickets!");
 
         return true;

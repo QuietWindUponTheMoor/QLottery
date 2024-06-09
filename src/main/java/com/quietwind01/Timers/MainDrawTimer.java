@@ -53,8 +53,9 @@ public class MainDrawTimer {
 
                 // Check that enough players actually purchased tickets. Minimum of 2 players have to purchase tickets
                 int playersCount = plugin.playerTickets.size();
-                if (playersCount < 2) {
-                    Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§eUnfortunately, not enough players purchased tickets. The countdown will now reset. Players that already purchased tickets will keep theirs until the next successful draw.");
+                if (playersCount < 2 && playersCount > 0) {
+                    plugin.updateTotalPool(poolDefaultAmount); // This will add the old pool amount to the starting pool amount for the next draw
+                    Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§3Nobody won this draw. The timer will restart. The pool is now §a$" + plugin.totalPool + "§3!");
                     // Clear temp data
                     clearTempData();
 
@@ -71,7 +72,8 @@ public class MainDrawTimer {
                 // Check if anybody purchased tickets
                 boolean nobodyPurchased = plugin.playerTickets.isEmpty();
                 if (nobodyPurchased == true) {
-                    Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§eUnfortunately, nobody has purchased tickets. The countdown will now reset.");
+                    plugin.updateTotalPool(poolDefaultAmount); // This will add the old pool amount to the starting pool amount for the next draw
+                    Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§3Nobody won this draw. The timer will restart. The pool is now §a$" + plugin.totalPool + "§3!");
                     // Clear temp data
                     clearTempData();
 
@@ -174,15 +176,15 @@ public class MainDrawTimer {
                 stats.updateServerDrawsTotal(1);
 
                 // Announce winners
-                Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "" + player.getDisplayName() + "§3won first place with §a$" + payout + "§3! §6Congratulations!");
+                Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "" + player.getDisplayName() + " §3won first place with §a$" + payout + "§3! §6Congratulations!");
                 if (payout2nd > 0) {
-                    Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "" + player2nd.getDisplayName() + "§3won second place with §a$" + payout2nd + "§3! §6Congratulations!");
+                    Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "" + player2nd.getDisplayName() + " §3won second place with §a$" + payout2nd + "§3! §6Congratulations!");
                 }
                 if (payout3rd > 0) {
-                    Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "" + player3rd.getDisplayName() + "§3won third place with §a$" + payout3rd + "§3! §6Congratulations!");
+                    Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "" + player3rd.getDisplayName() + " §3won third place with §a$" + payout3rd + "§3! §6Congratulations!");
                 }
                 if (payoutBonus > 0) {
-                    Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "" + playerBonus.getDisplayName() + "§3won the bonus prize with §a$" + payoutBonus + "§3! §6Congratulations!");
+                    Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "" + playerBonus.getDisplayName() + " §3won the bonus prize with §a$" + payoutBonus + "§3! §6Congratulations!");
                 }
 
                 // Payouts

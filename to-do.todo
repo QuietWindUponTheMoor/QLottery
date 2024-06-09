@@ -12,6 +12,10 @@ which allows the pool to accumulate
 
 --6. Notify player how much tickets cost via command
 
+--7. Make different messages for when players try to buy too many tickets at a time, vs if they just generally try to buy more than they can own at a time
+
+--8. Change "Not enough people bought tickets" message to be the same or similar to the "nobody won this draw" message because "Not enough people bought tickets" is disheartening
+
 
 
 v1.0.1:

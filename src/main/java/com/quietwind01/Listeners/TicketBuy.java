@@ -63,7 +63,7 @@ public class TicketBuy implements CommandExecutor {
                 player.sendMessage(plugin.chatPrefix + "§cYou can only purchase between §91 §cand §9" + maxTickets + " §ctickets.");
                 return true;
             } else if (canPlayerBuyTheseTickets(player, amount) == false) {
-                player.sendMessage(plugin.chatPrefix + "§cYou can only purchase between §91 §cand §9" + maxTickets + " §ctickets.");
+                player.sendMessage(plugin.chatPrefix + "§cYou can only own up to §9" + maxTickets + " §ctickets. You already have §9" + maxTickets + " §ctickets.");
                 return true;
             }
         } catch (NumberFormatException e) {
@@ -106,7 +106,7 @@ public class TicketBuy implements CommandExecutor {
 
         // Send success message
         player.sendMessage(plugin.chatPrefix + "§2You have purchased §f" + amount + " §2tickets for §e$" + totalCostOfPurchase + "§2, congratulations!");
-        player.sendMessage(plugin.chatPrefix + "§eYou now have a balance of §a$" + playerBalance + "§e!");
+        player.sendMessage(plugin.chatPrefix + "§eYou now have a balance of §a$" + (playerBalance - totalCostOfPurchase) + "§e!");
         player.sendMessage(plugin.chatPrefix + "§eYou now have  §a" + playerTickets.get(player.getName()) + "§e tickets!");
 
         return true;
