@@ -3,6 +3,8 @@ version: 1.0.0-RC.3
 main: com.quietwind01.QLottery
 api-version: 1.20
 
+depend: [Vault]
+
 commands:
   ql:
     description: The base command for QLottery.
@@ -17,3 +19,7 @@ commands:
         description: View the amount of money in the pool.
         usage: /ql pool amount
         permission: qlottery.pool
+      stats:
+        description: View the QLottery stats for yourself and the server.
+        usage: /ql stats
+        permission: qlottery.stats

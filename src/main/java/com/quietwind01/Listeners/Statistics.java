@@ -1,5 +1,7 @@
 package com.quietwind01.Listeners;
 
+import java.io.File;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,11 +13,12 @@ import com.quietwind01.YAML.PlayerStats;
 public class Statistics implements CommandExecutor {
     
     private final QLottery plugin;
-    private PlayerStats stats;
+    private final PlayerStats stats;
 
-    public Statistics(QLottery plugin) {
+    public Statistics(QLottery plugin, File dataFolder) {
 
         this.plugin = plugin;
+        this.stats = new PlayerStats(dataFolder);
 
     }
 

@@ -3,6 +3,8 @@ package com.quietwind01.Listeners;
 import com.quietwind01.Utils.EconomyUtils;
 import com.quietwind01.YAML.PlayerStats;
 import com.quietwind01.QLottery;
+
+import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -14,9 +16,10 @@ public class TicketSell implements CommandExecutor {
     private final QLottery plugin;
     private PlayerStats stats;
 
-    public TicketSell(QLottery plugin) {
+    public TicketSell(QLottery plugin, File dataFolder) {
 
         this.plugin = plugin;
+        this.stats = new PlayerStats(dataFolder);
 
     }
 

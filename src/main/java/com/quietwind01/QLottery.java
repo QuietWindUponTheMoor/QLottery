@@ -56,6 +56,9 @@ public class QLottery extends JavaPlugin {
             FileConfiguration config = YamlConfiguration.loadConfiguration(file);
             config = createStatsCode(config);
 
+            // Save the config
+            config.save(file);
+
             return true;
 
         } catch (IOException e) {
@@ -67,18 +70,16 @@ public class QLottery extends JavaPlugin {
 
     private FileConfiguration createStatsCode(FileConfiguration config) {
 
-        config.getString("# The amount of money paid out TOTAL over the lifespan of the server");
-        config.getString("all-time-payout-total");
-        config.set("all-time-payout-total", 0);
-        config.getString("# The amount of total draws over the lifespan of the server");
-        config.getString("all-time-draws-total");
-        config.set("all-time-draws-total", 0);
-        config.getString("# The amount of total wins over the lifespan of the server");
-        config.getString("all-time-wins");
-        config.set("all-time-wins", 0);
-        config.getString("# Player stats");
-        config.getString("player-stats.__LOTTERY__.total-tickets-purchased");
-        config.set("player-stats.__LOTTERY__.total-tickets-purchased", 0);
+        //config.getString("all-time-payout-total");
+        config.addDefault("all-time-payout-total", 0);
+        //config.getString("all-time-draws-total");
+        config.addDefault("all-time-draws-total", 0);
+        //config.getString("all-time-wins");
+        config.addDefault("all-time-wins", 0);
+        //config.getString("player-stats.__LOTTERY__.total-tickets-purchased");
+        config.addDefault("player-stats.__LOTTERY__.total-tickets-purchased", 0);
+
+        config.options().copyDefaults(true);
 
         return config;
 
@@ -99,13 +100,13 @@ public class QLottery extends JavaPlugin {
             saveStatsYAML();
 
             // Send startup messages
-            startMessages(this.chatPrefix);
+            startMessages(chatPrefix);
 
             // Start DrawInterval timer
             startMainTimer(interval);
 
             // Register commands
-            getCommand("ql").setExecutor(new CommandManager(this));
+            getCommand("ql").setExecutor(new CommandManager(this, getDataFolder()));
 
         } catch (Exception e) {
 

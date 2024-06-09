@@ -1,6 +1,9 @@
 package com.quietwind01.Listeners;
 
 import com.quietwind01.QLottery;
+
+import java.io.File;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,10 +13,12 @@ public class CommandManager implements CommandExecutor {
 
     private final QLottery plugin;
     boolean debugMode = false;
+    File dataFolder;
 
-    public CommandManager(QLottery plugin) {
+    public CommandManager(QLottery plugin, File dataFolder) {
 
         this.plugin = plugin;
+        this.dataFolder = dataFolder;
 
     }
 
@@ -28,7 +33,10 @@ public class CommandManager implements CommandExecutor {
 
         // Get parent subcommand
         String parentSubcommand = args[0].toLowerCase();
-        String childSubcommand = args[1].toLowerCase();
+        String childSubcommand = "";
+        if (args.length > 1) {
+            childSubcommand = args[1].toLowerCase();
+        }
 
         if (debugMode == true) {
             Player player = (Player) sender;
@@ -37,15 +45,16 @@ public class CommandManager implements CommandExecutor {
             player.sendMessage(plugin.chatPrefix + "Args Length: " + args.length);
             player.sendMessage(plugin.chatPrefix + "Is Ticket Command: " + "ticket".equals(parentSubcommand));
             player.sendMessage(plugin.chatPrefix + "Is Pool Command: " + "pool".equals(parentSubcommand));
+            player.sendMessage(plugin.chatPrefix + "Is Stats Command: " + "stats".equals(parentSubcommand));
         }
 
         // Ticket subcommands
         if ("ticket".equals(parentSubcommand)) {
             switch (childSubcommand) {
                 case "buy":
-                    return new TicketBuy(plugin).onCommand(sender, command, label, args);
+                    return new TicketBuy(plugin, dataFolder).onCommand(sender, command, label, args);
                 case "sell":
-                    return new TicketSell(plugin).onCommand(sender, command, label, args);
+                    return new TicketSell(plugin, dataFolder).onCommand(sender, command, label, args);
                 case "cost":
                     return new TicketCost(plugin).onCommand(sender, command, label, args);
                 default:
@@ -65,7 +74,7 @@ public class CommandManager implements CommandExecutor {
 
         // Stats command
         if ("stats".equals(parentSubcommand)) {
-            return new Statistics(plugin).onCommand(sender, command, label, args);
+            return new Statistics(plugin, dataFolder).onCommand(sender, command, label, args);
         }
 
         return true;
