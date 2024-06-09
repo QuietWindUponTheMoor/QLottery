@@ -3,8 +3,8 @@ package com.quietwind01.YAML;
 import java.io.File;
 import java.io.IOException;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
+import static com.quietwind01.Utils.Formatting.broadcast;
 
 public class PlayerStats {
 
@@ -23,7 +23,7 @@ public class PlayerStats {
 
         } catch (Exception e) {
 
-            Bukkit.broadcastMessage("§cCouldn't fetch stats.yml file.");
+            broadcast("{red}Couldn't fetch stats.yml file.");
             e.printStackTrace();
 
         }
@@ -47,7 +47,7 @@ public class PlayerStats {
 
         } catch (IOException e) {
 
-            Bukkit.broadcastMessage("§cCouldn't create new player (§b" + playerName + "§c).");
+            broadcast("{red}Couldn't create new player ({gold}" + playerName + "{gold}).");
             e.printStackTrace();
             return false;
             
@@ -81,7 +81,7 @@ public class PlayerStats {
 
         } catch (IOException e) {
 
-            Bukkit.broadcastMessage("§cCouldn't update total payout (server).");
+            broadcast("{red}Couldn't update total payout (server).");
             e.printStackTrace();
             return false;
 
@@ -99,7 +99,7 @@ public class PlayerStats {
 
         } catch (IOException e) {
 
-            Bukkit.broadcastMessage("§cCouldn't update total draws (server).");
+            broadcast("{red}Couldn't update total draws (server).");
             e.printStackTrace();
             return false;
             
@@ -117,7 +117,7 @@ public class PlayerStats {
 
         } catch (IOException e) {
 
-            Bukkit.broadcastMessage("§cCouldn't update total wins (server).");
+            broadcast("{red}Couldn't update total wins (server).");
             e.printStackTrace();
             return false;
             
@@ -151,7 +151,7 @@ public class PlayerStats {
 
         } catch (IOException e) {
 
-            Bukkit.broadcastMessage("§cCouldn't update total wins. (Player)");
+            broadcast("{red}Couldn't update total wins. (Player)");
             e.printStackTrace();
             return false;
             
@@ -169,7 +169,7 @@ public class PlayerStats {
 
         } catch (IOException e) {
 
-            Bukkit.broadcastMessage("§cCouldn't update total amount won (player).");
+            broadcast("{red}Couldn't update total amount won (player).");
             e.printStackTrace();
             return false;
             
@@ -187,7 +187,7 @@ public class PlayerStats {
 
         } catch (IOException e) {
 
-            Bukkit.broadcastMessage("§cCouldn't update total tickets purchased (player).");
+            broadcast("{red}Couldn't update total tickets purchased (player).");
             e.printStackTrace();
             return false;
             

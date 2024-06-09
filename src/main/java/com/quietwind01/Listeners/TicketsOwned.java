@@ -6,6 +6,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.quietwind01.QLottery;
+import static com.quietwind01.Utils.Formatting.formatNumber;
+import static com.quietwind01.Utils.Formatting.playerMessage;
 
 public class TicketsOwned implements CommandExecutor {
 
@@ -21,7 +23,7 @@ public class TicketsOwned implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage(plugin.chatPrefix + "§cOnly players can use this command.");
+            sender.sendMessage(plugin.chatPrefix + "{red}Only players can use this command.");
             return true;
         }
 
@@ -29,22 +31,22 @@ public class TicketsOwned implements CommandExecutor {
 
         // Check that player has proper permissions
         if (!player.hasPermission("qlottery.ticket.count")) {
-            player.sendMessage(plugin.chatPrefix + "§cYou do not have permission to use this command.");
+            playerMessage(player, plugin.chatPrefix + "{red}You do not have permission to use this command.");
             return true;
         }
 
         // Debug
-        //player.sendMessage("TicketsOwned Args: " + args.length);
+        //playerMessage(player, "TicketsOwned Args: " + args.length);
 
         // Check that the command has valid amount of arguments
         if (args.length < 1) {
-            player.sendMessage(plugin.chatPrefix + "§eUsage: /ql tickets");
+            playerMessage(player, plugin.chatPrefix + "{yellow}Usage: /ql tickets");
             return true;
         }
 
         // Check if the argument is 'tickets'
         if (!args[0].equalsIgnoreCase("tickets")) {
-            player.sendMessage(plugin.chatPrefix + "§eUsage: /ql tickets");
+            playerMessage(player, plugin.chatPrefix + "{yellow}Usage: /ql tickets");
             return true;
         }
 
@@ -53,7 +55,7 @@ public class TicketsOwned implements CommandExecutor {
         if (ticketsCount == null) {
             ticketsCount = 0;
         }
-        player.sendMessage(plugin.chatPrefix + "You own §a" + ticketsCount + " §ftickets!");
+        playerMessage(player, plugin.chatPrefix + "You own {green}" + formatNumber(ticketsCount) + " {white}tickets!");
 
         return true;
 

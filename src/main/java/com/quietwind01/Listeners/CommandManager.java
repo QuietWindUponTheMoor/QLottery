@@ -1,6 +1,7 @@
 package com.quietwind01.Listeners;
 
 import com.quietwind01.QLottery;
+import static com.quietwind01.Utils.Formatting.playerMessage;
 
 import java.io.File;
 
@@ -27,7 +28,7 @@ public class CommandManager implements CommandExecutor {
 
         // Check args length
         if (args.length == 0) {
-            sender.sendMessage(plugin.chatPrefix + "§cUsage: /ql <subcommand>");
+            sender.sendMessage(plugin.chatPrefix + "{red}Usage: /ql <subcommand>");
             return true;
         }
 
@@ -40,12 +41,12 @@ public class CommandManager implements CommandExecutor {
 
         if (debugMode == true) {
             Player player = (Player) sender;
-            player.sendMessage(plugin.chatPrefix + "Parent subcommand: " + parentSubcommand);
-            player.sendMessage(plugin.chatPrefix + "Child subcommand: " + childSubcommand);
-            player.sendMessage(plugin.chatPrefix + "Args Length: " + args.length);
-            player.sendMessage(plugin.chatPrefix + "Is Ticket Command: " + "ticket".equals(parentSubcommand));
-            player.sendMessage(plugin.chatPrefix + "Is Pool Command: " + "pool".equals(parentSubcommand));
-            player.sendMessage(plugin.chatPrefix + "Is Stats Command: " + "stats".equals(parentSubcommand));
+            playerMessage(player, plugin.chatPrefix + "Parent subcommand: " + parentSubcommand);
+            playerMessage(player, plugin.chatPrefix + "Child subcommand: " + childSubcommand);
+            playerMessage(player, plugin.chatPrefix + "Args Length: " + args.length);
+            playerMessage(player, plugin.chatPrefix + "Is Ticket Command: " + "ticket".equals(parentSubcommand));
+            playerMessage(player, plugin.chatPrefix + "Is Pool Command: " + "pool".equals(parentSubcommand));
+            playerMessage(player, plugin.chatPrefix + "Is Stats Command: " + "stats".equals(parentSubcommand));
         }
 
         // Ticket subcommands
@@ -58,7 +59,7 @@ public class CommandManager implements CommandExecutor {
                 case "cost":
                     return new TicketCost(plugin).onCommand(sender, command, label, args);
                 default:
-                    sender.sendMessage(plugin.chatPrefix + "§cUnknown subcommand. Usage: /ql <subcommand>");
+                    sender.sendMessage(plugin.chatPrefix + "{red}Unknown subcommand. Usage: /ql <subcommand>");
             }
         }
 

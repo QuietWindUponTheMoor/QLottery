@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
@@ -13,10 +12,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.quietwind01.Listeners.CommandManager;
 import com.quietwind01.Timers.MainDrawTimer;
+import static com.quietwind01.Utils.Formatting.broadcast;
 
 public class QLottery extends JavaPlugin {
 
-    public String chatPrefix = "§5[§a§l§nQLottery§5]§f "; // Get plugin name for chat
+    public String chatPrefix = "{purple}[{green}{bold}{underline}QLottery{purple}]{white} "; // Get plugin name for chat
     public double totalPool;
     public ConcurrentHashMap<String, Integer> playerTickets = new ConcurrentHashMap<>();
     
@@ -47,7 +47,7 @@ public class QLottery extends JavaPlugin {
 
         } catch (Exception e) {
 
-            Bukkit.getServer().broadcastMessage(chatPrefix + "§cSomething went severely wrong. Please check logs. QLottery has been disabled.");
+            broadcast(chatPrefix + "{red}Something went severely wrong. Please check logs. QLottery has been disabled.");
             e.printStackTrace();
             disablePlugin();
             return;
@@ -111,8 +111,8 @@ public class QLottery extends JavaPlugin {
 
     }
 
-    public void startMessages(String chatPrefix) {
-        getServer().broadcastMessage(chatPrefix + "§2The lottery has started!");
+    private void startMessages(String chatPrefix) {
+        broadcast(chatPrefix + "{darkgreen}The lottery has started!");
     }
 
     public boolean updateTotalPool(double addAmount) {
@@ -125,6 +125,5 @@ public class QLottery extends JavaPlugin {
     public ConcurrentHashMap<String, Integer> getPlayerTickets() {
         return this.playerTickets;
     }
-
 
 }

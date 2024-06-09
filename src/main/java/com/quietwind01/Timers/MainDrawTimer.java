@@ -13,6 +13,9 @@ import org.bukkit.entity.Player;
 import com.quietwind01.Utils.EconomyUtils;
 import com.quietwind01.QLottery;
 import com.quietwind01.YAML.PlayerStats;
+import static com.quietwind01.Utils.Formatting.formatNumber;
+import static com.quietwind01.Utils.Formatting.broadcast;
+import static com.quietwind01.Utils.Formatting.playerMessage;
 
 public class MainDrawTimer {
     
@@ -38,7 +41,7 @@ public class MainDrawTimer {
 
         // Check if interval is valid. Minimum draw time is 10 seconds
         if (interval.get() < 10) {
-            Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§cFATAL ERROR: 'draw-interval' must be higher than 10 in the config file. It is currently set to §f" + interval.get() + "§c. Disabling QLottery...");
+            broadcast(plugin.chatPrefix + "{red}FATAL ERROR: 'draw-interval' must be higher than 10 in the config file. It is currently set to {white}" + formatNumber(interval.get()) + "{red}. Disabling QLottery...");
             plugin.disablePlugin();
             return;
         }
@@ -55,7 +58,7 @@ public class MainDrawTimer {
                 int playersCount = plugin.playerTickets.size();
                 if (playersCount < 2 && playersCount > 0) {
                     plugin.updateTotalPool(poolDefaultAmount); // This will add the old pool amount to the starting pool amount for the next draw
-                    Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§3Nobody won this draw. The timer will restart. The pool is now §a$" + plugin.totalPool + "§3!");
+                    broadcast(plugin.chatPrefix + "{darkaqua}Nobody won this draw. The timer will restart. The pool is now {green}$" + formatNumber(plugin.totalPool) + "{darkaqua}!");
                     // Clear temp data
                     clearTempData();
 
@@ -67,13 +70,13 @@ public class MainDrawTimer {
                 }
 
                 // Announce that lottery is drawing
-                Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§aIt's time to select a winner! Drawing...");
+                broadcast(plugin.chatPrefix + "{green}It's time to select a winner! Drawing...");
 
                 // Check if anybody purchased tickets
                 boolean nobodyPurchased = plugin.playerTickets.isEmpty();
                 if (nobodyPurchased == true) {
                     plugin.updateTotalPool(poolDefaultAmount); // This will add the old pool amount to the starting pool amount for the next draw
-                    Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§3Nobody won this draw. The timer will restart. The pool is now §a$" + plugin.totalPool + "§3!");
+                    broadcast(plugin.chatPrefix + "{darkaqua}Nobody won this draw. The timer will restart. The pool is now {green}$" + formatNumber(plugin.totalPool) + "{darkaqua}!");
                     // Clear temp data
                     clearTempData();
 
@@ -103,7 +106,7 @@ public class MainDrawTimer {
                     plugin.updateTotalPool(poolDefaultAmount); // This will add the old pool amount to the starting pool amount for the next draw
 
                     // Announce that nobody won, and that the timer will reset and the pool will transfer over
-                    Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§3Nobody won this draw. The timer will restart. The pool is now §a$" + plugin.totalPool + "§3!");
+                    broadcast(plugin.chatPrefix + "{darkaqua}Nobody won this draw. The timer will restart. The pool is now {green}$" + formatNumber(plugin.totalPool) + "{darkaqua}!");
 
                     // Reset playerTickets, and allTickets and restart
                     clearTempDataOnNullDraw();
@@ -176,36 +179,36 @@ public class MainDrawTimer {
                 stats.updateServerDrawsTotal(1);
 
                 // Announce winners
-                Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "" + player.getDisplayName() + " §3won first place with §a$" + payout + "§3! §6Congratulations!");
+                broadcast(plugin.chatPrefix + "" + player.getDisplayName() + " {darkaqua}won first place with {green}$" + formatNumber(payout) + "{darkaqua}! {gold}Congratulations!");
                 if (payout2nd > 0) {
-                    Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "" + player2nd.getDisplayName() + " §3won second place with §a$" + payout2nd + "§3! §6Congratulations!");
+                    broadcast(plugin.chatPrefix + "" + player2nd.getDisplayName() + " {darkaqua}won second place with {green}$" + formatNumber(payout2nd) + "{darkaqua}! {gold}Congratulations!");
                 }
                 if (payout3rd > 0) {
-                    Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "" + player3rd.getDisplayName() + " §3won third place with §a$" + payout3rd + "§3! §6Congratulations!");
+                    broadcast(plugin.chatPrefix + "" + player3rd.getDisplayName() + " {darkaqua}won third place with {green}$" + formatNumber(payout3rd) + "{darkaqua}! {gold}Congratulations!");
                 }
                 if (payoutBonus > 0) {
-                    Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "" + playerBonus.getDisplayName() + " §3won the bonus prize with §a$" + payoutBonus + "§3! §6Congratulations!");
+                    broadcast(plugin.chatPrefix + "" + playerBonus.getDisplayName() + " {darkaqua}won the bonus prize with {green}$" + formatNumber(payoutBonus) + "{darkaqua}! {gold}Congratulations!");
                 }
 
                 // Payouts
                 EconomyUtils econUtility = new EconomyUtils(plugin);
                 econUtility.addBalance(player, payout);
-                player.sendMessage(plugin.chatPrefix + "§a" + payout + "§fhas been added to your account! Congratulations! You now have §a$" + econUtility.getPlayerBalance(player) + "§f.");
-                player.sendMessage(plugin.chatPrefix + "§eYou were taxed §c$" + payoutTax + " §efor this prize.");
+                playerMessage(player, plugin.chatPrefix + "{green}" + payout + "{white}has been added to your account! Congratulations! You now have {green}$" + formatNumber(econUtility.getPlayerBalance(player)) + "{white}.");
+                playerMessage(player, plugin.chatPrefix + "{yellow}You were taxed {red}$" + formatNumber(payoutTax) + " {yellow}for this prize.");
                 if (payout2nd > 0) {
                     econUtility.addBalance(player2nd, payout2nd);
-                    player.sendMessage(plugin.chatPrefix + "§a" + payout2nd + "§fhas been added to your account! Congratulations! You now have §a$" + econUtility.getPlayerBalance(player2nd) + "§f.");
-                    player.sendMessage(plugin.chatPrefix + "§eYou were taxed §c$" + payout2ndTax + " §efor this prize.");
+                    playerMessage(player, plugin.chatPrefix + "{green}" + payout2nd + "{white}has been added to your account! Congratulations! You now have {green}$" + formatNumber(econUtility.getPlayerBalance(player2nd)) + "{white}.");
+                    playerMessage(player, plugin.chatPrefix + "{yellow}You were taxed {red}$" + formatNumber(payout2ndTax) + " {yellow}for this prize.");
                 }
                 if (payout3rd > 0) {
                     econUtility.addBalance(player2nd, payout3rd);
-                    player.sendMessage(plugin.chatPrefix + "§a" + payout3rd + "§fhas been added to your account! Congratulations! You now have §a$" + econUtility.getPlayerBalance(player3rd) + "§f.");
-                    player.sendMessage(plugin.chatPrefix + "§eYou were taxed §c$" + payout3rdTax + " §efor this prize.");
+                    playerMessage(player, plugin.chatPrefix + "{green}" + payout3rd + "{white}has been added to your account! Congratulations! You now have {green}$" + formatNumber(econUtility.getPlayerBalance(player3rd)) + "{white}.");
+                    playerMessage(player, plugin.chatPrefix + "{yellow}You were taxed {red}$" + formatNumber(payout3rdTax) + " {yellow}for this prize.");
                 }
                 if (payoutBonus > 0) {
                     econUtility.addBalance(playerBonus, payoutBonus);
-                    player.sendMessage(plugin.chatPrefix + "§a" + payoutBonus + "§fhas been added to your account! Congratulations! You now have §a$" + econUtility.getPlayerBalance(playerBonus) + "§f.");
-                    player.sendMessage(plugin.chatPrefix + "§eYou were taxed §c$0 §efor this prize."); // Remember, not taxed :)
+                    playerMessage(player, plugin.chatPrefix + "{green}" + payoutBonus + "{white}has been added to your account! Congratulations! You now have {green}$" + formatNumber(econUtility.getPlayerBalance(playerBonus)) + "{white}.");
+                    playerMessage(player, plugin.chatPrefix + "{yellow}You were taxed {red}$0 {yellow}for this prize."); // Remember, not taxed :)
                 }
 
                 // Clear temp data
@@ -235,16 +238,16 @@ public class MainDrawTimer {
 
         // Check time left is equal to one of the percentages
         if (currentInterval == P50) {
-            Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§f" + currentInterval + "§6 seconds left before the lottery is drawn!");
+            broadcast(plugin.chatPrefix + "{white}" + formatNumber(currentInterval) + "{gold} seconds left before the lottery is drawn!");
         }
         if (currentInterval == P25) {
-            Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§f" + currentInterval + "§6 seconds left before the lottery is drawn!");
+            broadcast(plugin.chatPrefix + "{white}" + formatNumber(currentInterval) + "{gold} seconds left before the lottery is drawn!");
         }
         if (currentInterval == P15) {
-            Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§f" + currentInterval + "§6 seconds left before the lottery is drawn!");
+            broadcast(plugin.chatPrefix + "{white}" + formatNumber(currentInterval) + "{gold} seconds left before the lottery is drawn!");
         }
         if (currentInterval == P05) {
-            Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§f" + currentInterval + "§6 seconds left before the lottery is drawn!");
+            broadcast(plugin.chatPrefix + "{white}" + formatNumber(currentInterval) + "{gold} seconds left before the lottery is drawn!");
         }
 
     }
@@ -308,7 +311,7 @@ public class MainDrawTimer {
 
     }
 
-    public void stopTimer() {
+    private void stopTimer() {
         if (taskID != -1) {
             Bukkit.getScheduler().cancelTask(taskID);
             taskID = -1; // Reset the task ID

@@ -10,6 +10,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import com.quietwind01.YAML.PlayerStats;
+import static com.quietwind01.Utils.Formatting.formatNumber;
+import static com.quietwind01.Utils.Formatting.playerMessage;
 
 public class TicketBuy implements CommandExecutor {
     
@@ -27,7 +29,7 @@ public class TicketBuy implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage(plugin.chatPrefix + "§cOnly players can use this command.");
+            sender.sendMessage(plugin.chatPrefix + "{red}Only players can use this command.");
             return true;
         }
 
@@ -35,22 +37,22 @@ public class TicketBuy implements CommandExecutor {
 
         // Check that player has proper permissions
         if (!player.hasPermission("qlottery.ticket.buy")) {
-            player.sendMessage(plugin.chatPrefix + "§cYou do not have permission to use this command.");
+            playerMessage(player, plugin.chatPrefix + "{red}You do not have permission to use this command.");
             return true;
         }
 
         // Debug
-        //player.sendMessage("TicketBuy Args: " + args.length);
+        //playerMessage(player, "TicketBuy Args: " + args.length);
 
         // Check that the command has valid amount of arguments
         if (args.length < 3) {
-            player.sendMessage(plugin.chatPrefix + "§eUsage: /ql ticket buy <amount>");
+            playerMessage(player, plugin.chatPrefix + "{yellow}Usage: /ql ticket buy <amount>");
             return true;
         }
 
         // Check if the first two arguments are "ticket" and "buy"
         if (!args[0].equalsIgnoreCase("ticket") || !args[1].equalsIgnoreCase("buy")) {
-            player.sendMessage(plugin.chatPrefix + "§cUsage: /ql ticket buy <amount>");
+            playerMessage(player, plugin.chatPrefix + "{red}Usage: /ql ticket buy <amount>");
             return true;
         }
 
@@ -60,14 +62,14 @@ public class TicketBuy implements CommandExecutor {
         try {
             amount = Integer.parseInt(args[2]);
             if (amount < 1 || amount > maxTickets) {
-                player.sendMessage(plugin.chatPrefix + "§cYou can only purchase between §91 §cand §9" + maxTickets + " §ctickets.");
+                playerMessage(player, plugin.chatPrefix + "{red}You can only purchase between {blue}1 {red}and {blue}" + formatNumber(maxTickets) + " {red}tickets.");
                 return true;
             } else if (canPlayerBuyTheseTickets(player, amount) == false) {
-                player.sendMessage(plugin.chatPrefix + "§cYou can only own up to §9" + maxTickets + " §ctickets. You already have §9" + maxTickets + " §ctickets.");
+                playerMessage(player, plugin.chatPrefix + "{red}You can only own up to {blue}" + formatNumber(maxTickets) + " {red}tickets. You already have {blue}" + formatNumber(maxTickets) + " {red}tickets.");
                 return true;
             }
         } catch (NumberFormatException e) {
-            player.sendMessage(plugin.chatPrefix + "§cInvalid amount. Please specify a valid number between §91 §cand §9" + maxTickets + "§c.");
+            playerMessage(player, plugin.chatPrefix + "{red}Invalid amount. Please specify a valid number between {blue}1 {red}and {blue}" + formatNumber(maxTickets) + "{red}.");
             return true;
         }
 
@@ -83,7 +85,7 @@ public class TicketBuy implements CommandExecutor {
 
         // Check if the player has enough money
         if (playerBalance < totalCostOfPurchase) {
-            player.sendMessage(plugin.chatPrefix + "§cYou do not have enough money to buy §f" + amount + " §ctickets!");
+            playerMessage(player, plugin.chatPrefix + "{red}You do not have enough money to buy {white}" + formatNumber(amount) + " {red}tickets!");
             return false;
         }
 
@@ -105,9 +107,9 @@ public class TicketBuy implements CommandExecutor {
         plugin.updateTotalPool(totalCostOfPurchase);
 
         // Send success message
-        player.sendMessage(plugin.chatPrefix + "§2You have purchased §f" + amount + " §2tickets for §e$" + totalCostOfPurchase + "§2, congratulations!");
-        player.sendMessage(plugin.chatPrefix + "§eYou now have a balance of §a$" + (playerBalance - totalCostOfPurchase) + "§e!");
-        player.sendMessage(plugin.chatPrefix + "§eYou now have  §a" + playerTickets.get(player.getName()) + "§e tickets!");
+        playerMessage(player, plugin.chatPrefix + "{darkgreen}You have purchased {white}" + formatNumber(amount) + " {darkgreen}tickets for {yellow}$" + formatNumber(totalCostOfPurchase) + "{darkgreen}, congratulations!");
+        playerMessage(player, plugin.chatPrefix + "{yellow}You now have a balance of {green}$" + formatNumber((playerBalance - totalCostOfPurchase)) + "{yellow}!");
+        playerMessage(player, plugin.chatPrefix + "{yellow}You now have {green}" + formatNumber(playerTickets.get(player.getName())) + "{yellow} tickets!");
 
         return true;
 

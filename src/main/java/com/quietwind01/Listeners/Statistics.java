@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 
 import com.quietwind01.QLottery;
 import com.quietwind01.YAML.PlayerStats;
+import static com.quietwind01.Utils.Formatting.formatNumber;
+import static com.quietwind01.Utils.Formatting.playerMessage;
 
 public class Statistics implements CommandExecutor {
     
@@ -26,7 +28,7 @@ public class Statistics implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage(plugin.chatPrefix + "§cOnly players can use this command.");
+            sender.sendMessage(plugin.chatPrefix + "{red}Only players can use this command.");
             return true;
         }
 
@@ -34,22 +36,22 @@ public class Statistics implements CommandExecutor {
 
         // Check that player has proper permissions
         if (!player.hasPermission("qlottery.stats")) {
-            player.sendMessage(plugin.chatPrefix + "§cYou do not have permission to use this command.");
+            playerMessage(player, plugin.chatPrefix + "{red}You do not have permission to use this command.");
             return true;
         }
 
         // Debug
-        //player.sendMessage("TicketBuy Args: " + args.length);
+        //playerMessage(player, "TicketBuy Args: " + args.length);
 
         // Check that the command has valid amount of arguments
         if (args.length < 1) {
-            player.sendMessage(plugin.chatPrefix + "§eUsage: /ql stats");
+            playerMessage(player, plugin.chatPrefix + "{yellow}Usage: /ql stats");
             return true;
         }
 
         // Check if the two arguments are "pool" and "amount"
         if (!args[0].equalsIgnoreCase("stats")) {
-            player.sendMessage(plugin.chatPrefix + "§eUsage: /ql stats");
+            playerMessage(player, plugin.chatPrefix + "{yellow}Usage: /ql stats");
             return true;
         }
 
@@ -66,8 +68,8 @@ public class Statistics implements CommandExecutor {
         double playerTotalTickets = stats.getTotalTicketsPurchased(playerName);
 
         // Send the stats to the player
-        player.sendMessage(plugin.chatPrefix + "§3You have §6" + playerTotalWins + " §3wins, you've purchased §6" + playerTotalTickets + " §3tickets, and you've won a total of §a$" + playerTotalPayout + "§3!");
-        player.sendMessage(plugin.chatPrefix + "§3The server has drawn §6" + serverTotalDraws + " §3times, paid out §a$" + serverTotalPayouts + " §3and there have been a total of §6" + serverTotalWins + " §3jackpots won! There have been §6" + lotteryTotalTickets + " §3total tickets sold.");
+        playerMessage(player, plugin.chatPrefix + "{darkaqua}You have {gold}" + formatNumber(playerTotalWins) + " {darkaqua}wins, you've purchased {gold}" + formatNumber(playerTotalTickets) + " {darkaqua}tickets, and you've won a total of {green}$" + formatNumber(playerTotalPayout) + "{darkaqua}!");
+        playerMessage(player, plugin.chatPrefix + "{darkaqua}The server has drawn {gold}" + formatNumber(serverTotalDraws) + " {darkaqua}times, paid out {green}$" + formatNumber(serverTotalPayouts) + " {darkaqua}and there have been a total of {gold}" + formatNumber(serverTotalWins) + " {darkaqua}jackpots won! There have been {gold}" + formatNumber(lotteryTotalTickets) + " {darkaqua}total tickets sold.");
 
         return true;
 
