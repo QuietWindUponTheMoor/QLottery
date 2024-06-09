@@ -38,10 +38,10 @@ public class Placeholder {
 
     public static void broadcast(String input) {
 
-        // Iterate over the entries in the map and replace each placeholder with the corresponding color code
-        String output = "";
+        // Replace placeholders with color codes
+        String output = input;
         for (Map.Entry<String, String> entry : colorCodes.entrySet()) {
-            output = input.replace(entry.getKey().toLowerCase(), entry.getValue());
+            output = output.replace(entry.getKey().toLowerCase(), entry.getValue());
         }
         Bukkit.getServer().broadcastMessage(output);
         
@@ -49,10 +49,10 @@ public class Placeholder {
 
     public static void playerMessage(Player player, String input) {
 
-        // Iterate over the entries in the map and replace each placeholder with the corresponding color code
-        String output = "";
+        // Replace placeholders with color codes
+        String output = input;
         for (Map.Entry<String, String> entry : colorCodes.entrySet()) {
-            output = input.replace(entry.getKey().toLowerCase(), entry.getValue());
+            output = output.replace(entry.getKey().toLowerCase(), entry.getValue());
         }
         player.sendMessage(output);
         
