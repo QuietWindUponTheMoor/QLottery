@@ -50,6 +50,9 @@ public class TicketsOwned implements CommandExecutor {
 
         // Notify player
         Integer ticketsCount = plugin.playerTickets.get(player.getName());
+        if (ticketsCount == null) {
+            ticketsCount = 0;
+        }
         player.sendMessage(plugin.chatPrefix + "You own §a" + ticketsCount + " §ftickets!");
 
         return true;

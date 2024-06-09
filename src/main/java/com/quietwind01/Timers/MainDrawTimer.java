@@ -233,16 +233,16 @@ public class MainDrawTimer {
 
         // Check time left is equal to one of the percentages
         if (currentInterval == P50) {
-            Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§f" + currentInterval + "§6seconds left before the lottery is drawn!");
+            Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§f" + currentInterval + "§6 seconds left before the lottery is drawn!");
         }
         if (currentInterval == P25) {
-            Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§f" + currentInterval + "§6seconds left before the lottery is drawn!");
+            Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§f" + currentInterval + "§6 seconds left before the lottery is drawn!");
         }
         if (currentInterval == P15) {
-            Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§f" + currentInterval + "§6seconds left before the lottery is drawn!");
+            Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§f" + currentInterval + "§6 seconds left before the lottery is drawn!");
         }
         if (currentInterval == P05) {
-            Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§f" + currentInterval + "§6seconds left before the lottery is drawn!");
+            Bukkit.getServer().broadcastMessage(plugin.chatPrefix + "§f" + currentInterval + "§6 seconds left before the lottery is drawn!");
         }
 
     }

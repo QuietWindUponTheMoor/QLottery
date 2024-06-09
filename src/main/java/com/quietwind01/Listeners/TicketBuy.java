@@ -59,7 +59,10 @@ public class TicketBuy implements CommandExecutor {
         int maxTickets = plugin.getConfig().getInt("max-tickets");
         try {
             amount = Integer.parseInt(args[2]);
-            if (amount < 1 || amount > 20) {
+            if (amount < 1 || amount > maxTickets) {
+                player.sendMessage(plugin.chatPrefix + "§cYou can only purchase between §91 §cand §9" + maxTickets + " §ctickets.");
+                return true;
+            } else if (canPlayerBuyTheseTickets(player, amount) == false) {
                 player.sendMessage(plugin.chatPrefix + "§cYou can only purchase between §91 §cand §9" + maxTickets + " §ctickets.");
                 return true;
             }
@@ -107,6 +110,41 @@ public class TicketBuy implements CommandExecutor {
         player.sendMessage(plugin.chatPrefix + "§eYou now have  §a" + playerTickets.get(player.getName()) + "§e tickets!");
 
         return true;
+
+    }
+
+    private boolean canPlayerBuyTheseTickets(Player player, Integer amount) {
+
+        // Initialize canBuy
+        boolean canBuy = false;
+
+        // Max tickets allowed to own
+        int maxTickets = plugin.getConfig().getInt("max-tickets");
+
+        // Get the player's map record
+        Integer currentTicketsOwned = plugin.playerTickets.get(player.getName());
+
+        // If the player has no tickets
+        if (currentTicketsOwned == null || currentTicketsOwned <= 0) {
+            if (amount <= maxTickets && amount > 0) {
+                canBuy = true;
+            } else if (amount > maxTickets || amount <= 0) {
+                canBuy = false;
+            }
+        }
+
+        // If player already has tickets
+        if (currentTicketsOwned != null && currentTicketsOwned > 0) {
+            Integer newTotal = currentTicketsOwned + amount;
+            if (newTotal > maxTickets) {
+                canBuy = false;
+            } else if (newTotal > 0 && newTotal <= maxTickets) {
+                canBuy = true;
+            }
+        }
+
+        // Return result
+        return canBuy;
 
     }
 
