@@ -15,6 +15,10 @@ commands:
         description: Buy or sell tickets.
         usage: /ql ticket <buy|sell> <amount>
         permission: qlottery.ticket
+      tickets:
+        description: Standalone command that tells the player how many tickets they own.
+        usage: /ql tickets
+        permission: qlottery.ticket.count
       pool:
         description: View the amount of money in the pool.
         usage: /ql pool amount
