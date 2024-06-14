@@ -57,8 +57,8 @@ public class MainDrawTimer {
                 // Check that enough players actually purchased tickets. Minimum of 2 players have to purchase tickets
                 int playersCount = plugin.playerTickets.size();
                 if (playersCount < 2 && playersCount > 0) {
-                    plugin.updateTotalPool(poolDefaultAmount); // This will add the old pool amount to the starting pool amount for the next draw
-                    broadcast(plugin.chatPrefix + "{darkaqua}Nobody won this draw. The timer will restart. The pool is now {green}$" + formatNumber(plugin.totalPool) + "{darkaqua}!");
+                    // Handle accrue pool
+                    handlePoolAccrue();
                     // Clear temp data
                     clearTempData();
 
@@ -75,8 +75,8 @@ public class MainDrawTimer {
                 // Check if anybody purchased tickets
                 boolean nobodyPurchased = plugin.playerTickets.isEmpty();
                 if (nobodyPurchased == true) {
-                    plugin.updateTotalPool(poolDefaultAmount); // This will add the old pool amount to the starting pool amount for the next draw
-                    broadcast(plugin.chatPrefix + "{darkaqua}Nobody won this draw. The timer will restart. The pool is now {green}$" + formatNumber(plugin.totalPool) + "{darkaqua}!");
+                    // Handle accrue pool
+                    handlePoolAccrue();
                     // Clear temp data
                     clearTempData();
 
@@ -102,11 +102,8 @@ public class MainDrawTimer {
 
                 // Before going further, check if the winner is __LOTTERY__
                 if (playerName.equals("__LOTTERY__")) {
-                    // Calculate the new pool size and set it
-                    plugin.updateTotalPool(poolDefaultAmount); // This will add the old pool amount to the starting pool amount for the next draw
-
-                    // Announce that nobody won, and that the timer will reset and the pool will transfer over
-                    broadcast(plugin.chatPrefix + "{darkaqua}Nobody won this draw. The timer will restart. The pool is now {green}$" + formatNumber(plugin.totalPool) + "{darkaqua}!");
+                    // Handle accrue pool
+                    handlePoolAccrue();
 
                     // Reset playerTickets, and allTickets and restart
                     clearTempDataOnNullDraw();
@@ -225,6 +222,29 @@ public class MainDrawTimer {
             timeLeft(currentInterval);
 
         }, 0L, 20L).getTaskId(); // Run every 20 ticks/1 seconds
+
+    }
+
+    private void handlePoolAccrue() {
+
+        double poolAccrueLimit = plugin.getConfig().getDouble("pool-accrue-limit");
+
+        // If poolAccrueLimit is set to -1.00, ignore this as admin wants no limit
+        if (poolAccrueLimit == -1 || poolAccrueLimit < 0) {
+            return;
+        }
+
+        // Check to make sure new pool amount is not going to be higher than pool-accrue-limit
+        if (poolAccrueLimit > (plugin.totalPool + poolDefaultAmount)) {
+            broadcast(plugin.chatPrefix + "{darkaqua}The pool has reached its max limit, it has not accrued.");
+        } else {
+            plugin.updateTotalPool(poolDefaultAmount); // This will add the old pool amount to the starting pool amount for the next draw
+        }
+
+        // Broadcast 'nobody won' message
+        broadcast(plugin.chatPrefix + "{darkaqua}Nobody won this draw. The timer will restart. The pool is now {green}$" + formatNumber(plugin.totalPool) + "{darkaqua}!");
+
+        return;
 
     }
 
